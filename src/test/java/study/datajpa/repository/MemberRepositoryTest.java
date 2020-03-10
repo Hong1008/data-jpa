@@ -190,4 +190,20 @@ class MemberRepositoryTest {
         em.flush(); //Update Query 실행X
     }
 
+    @Test
+    public void projections(){
+        Team teamA = new Team("teamA");
+        teamRepository.save(teamA);
+        memberRepository.save(new Member("member1", 10, teamA));
+        memberRepository.save(new Member("member2", 20, teamA));
+        em.flush();
+        em.clear();
+
+        List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("member1",NestedClosedProjections.class);
+
+        for (NestedClosedProjections userNameOnly : result) {
+            System.out.println("username = "+userNameOnly.getUsername());
+        }
+    }
+
 }
